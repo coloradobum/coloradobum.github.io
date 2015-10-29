@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My Adventures in Coding</title>
+    <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</description>
+    <link>http://jeffthomas.xyz/</link>
+    <atom:link href="http://jeffthomas.xyz/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 29 Oct 2015 16:55:25 -0600</pubDate>
+    <lastBuildDate>Thu, 29 Oct 2015 16:55:25 -0600</lastBuildDate>
+    <generator>Jekyll v3.0.0</generator>
+    
+      <item>
+        <title>many_to_many relationships in Rails</title>
+        <description>&lt;p&gt;In Rails, we have model classes or for short, models. ActiveRecord provides six &lt;strong&gt;associations&lt;/strong&gt; that allow models to interact with each other by creating &lt;strong&gt;relationships&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;I will focus on two of the six associations today.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;belongs_to&lt;/li&gt;
+  &lt;li&gt;has_one&lt;/li&gt;
+  &lt;li&gt;has_many&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;has_many :through&lt;/strong&gt; or &lt;strong&gt;HMT&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;has_one :through&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;has_and_belongs_to_many&lt;/strong&gt; or &lt;strong&gt;HABTM&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The HMT and HABTM associations both result in a many-to-many relationship, but there are subtle differences.&lt;/p&gt;
+
+&lt;p&gt;When and why should you use one or the other?&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;HABTM&lt;/code&gt; association uses a &lt;strong&gt;join table&lt;/strong&gt; to manage the relationship while the &lt;code&gt;HMT&lt;/code&gt; association uses a &lt;strong&gt;join model&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;HABTM&lt;/code&gt; association is often considered the ‘old-school’ way of creating a many-to-many relationship. In fact, most people in the Rails community would advise against using this relationship.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;HMT&lt;/code&gt; association is more flexible and should be the default approach when a many-to-many relationship is needed.&lt;/p&gt;
+
+&lt;p&gt;For example, the cost of a show that involves both a movie and a theatre can be added to the join model as an additional column. This flexibility is not possible using a HABTM with a join table.&lt;/p&gt;
+
+&lt;h3 id=&quot;how-to-setup-an-hmt-association&quot;&gt;How to setup an HMT association&lt;/h3&gt;
+
+&lt;p&gt;Let’s use an example of movie theatres and movies.&lt;/p&gt;
+
+&lt;p&gt;In the ActiveRecord parlance, Movie has_many Theatres and Theatre has_many Movies.&lt;/p&gt;
+
+&lt;p&gt;To manage this many_to_many relationship using an HMT association, we must create a third model class that represents this relationship.&lt;/p&gt;
+
+&lt;p&gt;This model class should describe the relationship. I will use &lt;em&gt;Showtimes&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Use the Rails generate command to create the three model classes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rails g model movie title:string
+rails g model theatre name:string
+rails g model showtime
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run the migration:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rake db:migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Create a new migration:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rails g migration AddColumnToShowtime
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Update the migration file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class AddColumnToShowtime &amp;lt; ActiveRecord::Migration
+  def change
+    add_column :showtime, :movie_id, :integer
+    add_column :showtime, :theatre_id, :integer
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run the migration:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rake db:migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now add the relationships to the model classes:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# models/movie.rb
+class Movie &amp;lt; ActiveRecord::Base
+  has_many :showtimes
+  has_many :theatres, through: :showtimes
+end
+
+# models/theatre.rb
+class Theatre &amp;lt; ActiveRecord::Base
+  has_many :showtimes
+  has_many :movies, through: :showtimes
+end
+
+# models/showtime.rb
+class ShowTime &amp;lt; ActiveRecord::Base
+  belongs_to :movie
+  belongs_to :theatre
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;how-to-setup-an-habtm-association&quot;&gt;How to setup an HABTM association&lt;/h3&gt;
+
+&lt;p&gt;A HABTM association will probably never be used in a new Rails application since the HMT is the best and most flexible choice for most situations, but for reference, here it is.&lt;/p&gt;
+
+&lt;p&gt;This example is similar to the HMT association, but,  instead of a join model a join table is used instead.&lt;/p&gt;
+
+&lt;p&gt;Use the Rails generate command to create the model classes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rails g model movie title:string
+rails g model theatre name:string
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run the migration:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rake db:migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Create a new migration for the join table. Rails 4 provides the new create_join_table method.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rails g migration create_join_table movie theatre
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Verify your migration file looks like this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class CreateJoinTable &amp;lt; ActiveRecord::Migration
+  def change
+    create_join_table :movies, :theatres do |t|
+      t.index [:movie_id, :theatre_id]
+      t.index [:theatre_id, :movie_id]
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run the migration:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rake db:migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now add the relationships to the model classes:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# models/movie.rb
+class Movie &amp;lt; ActiveRecord::Base
+  has_and_belongs_to_many :theatres
+end
+
+# models/theatre.rb
+class Theatre &amp;lt; ActiveRecord::Base
+  has_and_belongs_to_many :movies
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Remember, the example for a HABTM association is almost never used in the Rails world. I’m showing this example only for a comparison. Keep you life simple and use the HTM instead.&lt;/p&gt;
+
+&lt;h3 id=&quot;using-an-hmt-relationship&quot;&gt;Using an HMT Relationship&lt;/h3&gt;
+
+&lt;p&gt;Now that a many-to-many relationship is setup using an HMT association, how do we use it? The following applies only to the HMT relationship&lt;/p&gt;
+
+&lt;p&gt;Let’s start up the rails console.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rails c
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Create movie and theatre instances.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;movie = Movie.create(title: &quot;Jaws&quot;)
+
+theatre = Theatre.create(name: &quot;Sundance Kabuki Cinemas&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now let’s create the relationship between Jaws and Sundance Kabuki Cinema.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;movie.showtimes.create(theatre: theatre)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There you have it. Since we used a join model, we can now create a new migration to add the movie time and the price of Jaws as it’s played at the Sundance Kabuki Cinema.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 11 Mar 2015 18:56:49 -0600</pubDate>
+        <link>http://jeffthomas.xyz/many-to-many-relationships-in-rails</link>
+        <guid isPermaLink="true">http://jeffthomas.xyz/many-to-many-relationships-in-rails</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Adding an owner to new records in Rails</title>
+        <description>&lt;p&gt;Suppose you have a new rails site with the &lt;a href=&quot;https://github.com/plataformatec/devise&quot;&gt;devise gem&lt;/a&gt; installed.&lt;/p&gt;
+
+&lt;p&gt;For example, let’s say you have a tree app. You can create, edit, and delete different types of trees.&lt;/p&gt;
+
+&lt;p&gt;In order to create a tree, you must be logged in and you can only delete trees you’ve created.&lt;/p&gt;
+
+&lt;p&gt;You can setup a hidden field in the form that contains the current user, but there’s an easier and more secure way.&lt;/p&gt;
+
+&lt;p&gt;If you have Devise installed and the proper association is setup you can use the current_user helper from devise.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#app/models/user.rb
+has_many :trees
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A user_id field must also exist in the trees table.  This is setup when you run the generator. If you use the references word below, rails will automatically add the association above.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rails g model trees user:references
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then in the trees controller use this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#app/controllers/trees_controller.rb
+....
+def create
+  @tree = current_user.trees.new(tree_params)
+end
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You’ll now need to be logged in to create a new tree, but any new trees will now have an owner!&lt;/p&gt;
+
+&lt;p&gt;Hope this helps.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 06 Nov 2014 23:02:05 -0700</pubDate>
+        <link>http://jeffthomas.xyz/adding-an-owner-to-new-records-in-rails</link>
+        <guid isPermaLink="true">http://jeffthomas.xyz/adding-an-owner-to-new-records-in-rails</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Note management in ebooks</title>
+        <description>&lt;p&gt;I’ve always made notes in the margins of my books. When ebooks arrived on the scene, I searched for years to find the best way to sync my notes and highlights between books.&lt;/p&gt;
+
+&lt;p&gt;I finally found a solution a few months ago. I’m kinda embarrased to share this as it was right there all along. So you may laugh, but perhaps this post might help someone else.&lt;/p&gt;
+
+&lt;p&gt;First to be clear, the Amazon kindle app does a good job syncing notes and highlights, but what it neglects is books not purchased from amazon, like the pdf file I open in the kindle.&lt;/p&gt;
+
+&lt;p&gt;I tried several different pdf readers.  Many offer great highlighting and commenting. But syncing these between my laptop, iPad and iMac was a problem.&lt;/p&gt;
+
+&lt;p&gt;I tried making edits on a pdf in dropbox, but the experience was never ideal. Each save required a sync time and often my highlights were not editable after I saved the pdf.&lt;/p&gt;
+
+&lt;p&gt;Then one day experimenting with iBooks I figured it out!! Now, this solution will only work if you’ve made a faustian deal with Apple. But I do love their stuff and was happy to do so.&lt;/p&gt;
+
+&lt;h2 id=&quot;my-solution&quot;&gt;My solution&lt;/h2&gt;
+
+&lt;p&gt;When you buy an ebook, make sure you get a epub version. Then open this epub version from dropbox using ibooks from each device you wish to use.&lt;/p&gt;
+
+&lt;p&gt;You must initially open the epub document in ibooks from each device. When you do, you’ll discover all your notes, highlight and even page location has been synced!&lt;/p&gt;
+
+&lt;p&gt;This may seem small, but when I finally figured this out, I wanted to shout from the mountain top!&lt;/p&gt;
+
+&lt;p&gt;Hopefully this helps someone else out there.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 13 Oct 2014 15:26:48 -0600</pubDate>
+        <link>http://jeffthomas.xyz/note-management-in-ebooks</link>
+        <guid isPermaLink="true">http://jeffthomas.xyz/note-management-in-ebooks</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Simplify ssh connection strings</title>
+        <description>&lt;p&gt;Internet hosting providers sometimes allow ssh access to update files without using a web interface.  If the hosting account resides on a VPS, often the naming conventions are not friendly as you may be one of hundreds of accounts on that server.&lt;/p&gt;
+
+&lt;p&gt;Even if you have your own server, the username and hostname may be long or unfriendly. Perhaps you changed the default port for ssh.&lt;/p&gt;
+
+&lt;p&gt;This post will show you how to simplify your ssh connection strings.&lt;/p&gt;
+
+&lt;p&gt;For example, here’s a ssh string using a non-default ssh key and port number.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ssh -i ~/.ssh/a_public.key user489c@some.server01.com -p 5486&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Using the ssh config file we can easily abstract away the details to something easier to remember.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ssh my_blog_site&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;enter-the-ssh-config-file&quot;&gt;Enter the ssh config file&lt;/h3&gt;
+
+&lt;p&gt;Assuming the ssh keys are already configured to login to the server, let’s take this one step at a time.&lt;/p&gt;
+
+&lt;p&gt;First, create the ssh config file if it doesn’t exist&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;touch ~/.ssh/config&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Open and add a entry for the ssh connection string parameters above:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# ~/.ssh/config
+Host myblog
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next abstract the location of the public key to use for this connection.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# ~/.ssh/config
+Host myblog
+  	IdentityFile .ssh/hosting_public.key
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So no we have:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ssh 7605.us.34@jungleserver01.34j.com -p 5486&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s tackle the port number next.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# ~/.ssh/config	
+Host myblog
+  	IdentityFile .ssh/hosting_public.key
+  	Port 5486
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Easier…&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ssh 7605.us.34@jungleserver01.34j.com&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Add finally the username and hostname&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# ~/.ssh/config
+Host myblog
+  	IdentityFile .ssh/hosting_public.key
+  	Port 5486
+  	User 7605.us.34
+  	HostName jungleserver01.34j.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final simplified version of the ssh connection string.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ssh myblog&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;using-the-ssh-config-file-and-alias-together&quot;&gt;Using the ssh config file and alias together&lt;/h3&gt;
+
+&lt;p&gt;Why not just create an alias you ask?  This is definitely an option.  In fact using a combination of aliases and the ssh config file can give you even more leverage.&lt;/p&gt;
+
+&lt;p&gt;For example, let’s say I have 5 servers each with 10 separate unix user accounts. This is 50 unique ssh strings to manage.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server1
+user1
+user2
+...
+user10
+
+server2
+user1
+user2
+...
+user10
+
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Using the ssh config file I can abstrast the server hostname.&lt;/p&gt;
+
+ 	#~/.ssh/config
+
+&lt;pre&gt;&lt;code&gt;Host production1
+	HostName server1.somewhere.com
+    
+Host production2
+	HostName server2.somewhere.com
+    
+Host staging
+	HostName server5.somewwhere.com
+    
+Host development
+	HostName server7.somewhere.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Using an alias file I can  further simplify the command&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#.zshrc or .bashrc or etc.
+alias p1=&#39;ssh user1@production1&#39;
+alias p2=&#39;ssh user2@production2&#39;
+alias s1=&#39;ssh user1
+...
+etc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now I abstract my all my server locations. If the server hostname or something else changes, it’s arguably easier to refactor using these files.&lt;/p&gt;
+
+&lt;p&gt;This is obviously a contrived example, but hopefully this spawns some creativity.&lt;/p&gt;
+
+&lt;p&gt;One final bonus is if you use a gui client like Filezilla or Transmit. You can use the values from your ssh config file.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 07 Oct 2014 20:46:09 -0600</pubDate>
+        <link>http://jeffthomas.xyz/shorten-ssh-connection-strings</link>
+        <guid isPermaLink="true">http://jeffthomas.xyz/shorten-ssh-connection-strings</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Integration tests with Stripe</title>
+        <description>&lt;p&gt;I recently added &lt;a href=&quot;https://www.stripe.com&quot;&gt;Stripe&lt;/a&gt; integration to a web site and wanted to share my experience.&lt;/p&gt;
+
+&lt;p&gt;I started with an integration test, in accordance with an outside-in TDD approach.&lt;/p&gt;
+
+&lt;p&gt;As a good netcitizen, I wanted to refrain from hitting the Stripe servers with every test run, so I started to mock the Stripe API.&lt;/p&gt;
+
+&lt;p&gt;My first reaction was to reach for the handy &lt;a href=&quot;https://github.com/vcr/vcr&quot;&gt;vcr gem&lt;/a&gt;. Similar to a vcr, the vcr gem records the first response from an API and then uses this cached response in subsequent test runs.&lt;/p&gt;
+
+&lt;p&gt;I soon realized the vcr gem is designed to mock only server side http requests and not client side browser requests.&lt;/p&gt;
+
+&lt;p&gt;When using stripe.js, the browser first sends the request to the stripe api to get a token that represents the credit card information.&lt;/p&gt;
+
+&lt;p&gt;The request is then forwarded to the server where a separate request is made for the payment to the Stripe API using the tokenized credit card value.&lt;/p&gt;
+
+&lt;p&gt;My initial search for a gem to handle browser based (aka javascript) http requests uncovered the &lt;a href=&quot;https://github.com/oesmith/puffing-billy&quot;&gt;puffing billy gem&lt;/a&gt;.  If nothing else, the name was cool.&lt;/p&gt;
+
+&lt;p&gt;In the end I decided to use the &lt;a href=&quot;https://github.com/rebelidealist/stripe-ruby-mock&quot;&gt;stripe-ruby-mock gem&lt;/a&gt;. This gem is specifically designed for stubbing the Stripe API, including a way to start up a API mock server for integration tests.&lt;/p&gt;
+
+&lt;p&gt;The documentation is good, but here are the specific steps I took to get this running. I’m using rspec.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Gemfile
+group :test do  
+  gem &#39;stripe-ruby-mock&#39;
+  gem &#39;thin&#39; # default for mock server
+end ______
+# rails_helper.rb
+  	require &#39;thin&#39;
+  	require &#39;stripe_mock&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+ 	StripeMock.spawn_server
+
+&lt;p&gt;Here is the integration test:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/2014/Sep/upgrade_to_premium_account_spec.png&quot; alt=&quot;alt&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here is the mock server in action.  You can see the server daemon starts before the test and then ends after the test.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/2014/Sep/mock_server.png&quot; alt=&quot;alt&quot; /&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 18 Sep 2014 20:33:40 -0600</pubDate>
+        <link>http://jeffthomas.xyz/integration-tests-with-stripe</link>
+        <guid isPermaLink="true">http://jeffthomas.xyz/integration-tests-with-stripe</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Git log cleanup with git rebase -i</title>
+        <description>&lt;p&gt;Save early, save often is good advice.&lt;/p&gt;
+
+&lt;p&gt;It’s often not possible to finish a feature in one sitting or more complex features in even one day.  I have two possible options when it comes to “save early, save often”.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git stash&lt;/code&gt; or &lt;code&gt;git rebase&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git stash&lt;/code&gt; works fine, but I often forget to apply the stash when returning to a branch.&lt;/p&gt;
+
+&lt;h2 id=&quot;use-git-rebase&quot;&gt;Use &lt;code&gt;git rebase&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;git rebase&lt;/code&gt; has many uses, but I will focus on this one where `x’ is the number of previous commits from HEAD.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git rebase -i HEAD~x&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;I can now save early and save often knowing that I can merge, or in git parlance, “squash” all the verbose commits into one commit later.&lt;/p&gt;
+
+&lt;h2 id=&quot;lets-go&quot;&gt;Let’s go!&lt;/h2&gt;
+
+&lt;p&gt;First, assign a default editor to git. I will use vim, but you can &lt;a href=&quot;https://help.github.com/articles/associating-text-editors-with-git&quot;&gt;use others&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git config --global core.editor &quot;vim&quot;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Consider the following git log:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/2014/Aug/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Planting a tree requires several steps.  After the steps are complete, it’s more useful to know what we have than how we got there.&lt;/p&gt;
+
+&lt;p&gt;For example, if I want to submit a pull request, the code reviewers will want to view the final code, not all the individual steps taken.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git rebase -i HEAD~3&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This commands tells git I want to “interactively” rebase or squash the HEAD commit with the last 3 commits into one commit.&lt;/p&gt;
+
+&lt;p&gt;The documentation within each step is good, so read through that for the more details. Here I’ve replace ‘pick’ with r, s, s, and s.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/2014/Aug/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once you save and exit, the next file will appear for you. I used the ‘r’ command above, which allows me to ‘reword’ the commit message that summarizes the squashed commits.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/2014/Aug/Screenshot-2014-08-27-10-03-53.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here’s the revised log. Goodbye verbosity.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/2014/Aug/-last.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Wed, 27 Aug 2014 17:01:40 -0600</pubDate>
+        <link>http://jeffthomas.xyz/git-commit-cleanup</link>
+        <guid isPermaLink="true">http://jeffthomas.xyz/git-commit-cleanup</guid>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
