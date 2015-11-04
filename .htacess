@@ -1,0 +1,8 @@
+Redirect 301 
+
+Redirect 301 http://www.jeffthomas.xyz/git-commit-cleanup/ http://jeffthomas.xyz/git-commit-cleanup
+Redirect 301 http://www.jeffthomas.xyz/integration-tests-with-stripe/ http://jeffthomas.xyz/integration-tests-with-stripe
+Redirect 301 http://www.jeffthomas.xyz/shorten-ssh-connection-strings/ http://jeffthomas.xyz/shorten-ssh-connection-strings
+Redirect 301 http://www.jeffthomas.xyz/note-management-in-ebooks/ http://jeffthomas.xyz/note-management-in-ebooks
+Redirect 301 http://www.jeffthomas.xyz/adding-an-owner-to-new-records-in-rails/ http://jeffthomas.xyz/adding-an-owner-to-new-records-in-rails
+Redirect 301 http://www.jeffthomas.xyz/many_to_many-relationships-in-rails/ http://jeffthomas.xyz/many-to-many-relationships-in-rails
