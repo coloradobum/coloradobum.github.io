@@ -43,15 +43,19 @@
           
         
           
+          <a class="page-link" href="/now/">now</a>
+          
+        
+          
           <a class="page-link" href="/hire-me/">Hire me</a>
           
         
           
-          <a class="page-link" href="/resume/">Resume</a>
+          <a class="page-link" href="/about-me/">About Me</a>
           
         
           
-          <a class="page-link" href="/about-me/">About Me</a>
+          <a class="page-link" href="/resume/">Resume</a>
           
         
           
@@ -86,24 +90,27 @@
 
 <p>If you have Devise installed and the proper association is setup you can use the current_user helper from devise.</p>
 
-<pre><code>#app/models/user.rb
+<div class="highlighter-rouge"><pre class="highlight"><code>#app/models/user.rb
 has_many :trees
 </code></pre>
+</div>
 
 <p>A user_id field must also exist in the trees table.  This is setup when you run the generator. If you use the references word below, rails will automatically add the association above.</p>
 
-<pre><code>rails g model trees user:references
+<div class="highlighter-rouge"><pre class="highlight"><code>rails g model trees user:references
 </code></pre>
+</div>
 
 <p>Then in the trees controller use this:</p>
 
-<pre><code>#app/controllers/trees_controller.rb
+<div class="highlighter-rouge"><pre class="highlight"><code>#app/controllers/trees_controller.rb
 ....
 def create
   @tree = current_user.trees.new(tree_params)
 end
 ...
 </code></pre>
+</div>
 
 <p>You’ll now need to be logged in to create a new tree, but any new trees will now have an owner!</p>
 

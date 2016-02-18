@@ -43,15 +43,19 @@
           
         
           
+          <a class="page-link" href="/now/">now</a>
+          
+        
+          
           <a class="page-link" href="/hire-me/">Hire me</a>
           
         
           
-          <a class="page-link" href="/resume/">Resume</a>
+          <a class="page-link" href="/about-me/">About Me</a>
           
         
           
-          <a class="page-link" href="/about-me/">About Me</a>
+          <a class="page-link" href="/resume/">Resume</a>
           
         
           
@@ -93,11 +97,11 @@
 
 <p>When and why should you use one or the other?</p>
 
-<p>The <code>HABTM</code> association uses a <strong>join table</strong> to manage the relationship while the <code>HMT</code> association uses a <strong>join model</strong>.</p>
+<p>The <code class="highlighter-rouge">HABTM</code> association uses a <strong>join table</strong> to manage the relationship while the <code class="highlighter-rouge">HMT</code> association uses a <strong>join model</strong>.</p>
 
-<p>The <code>HABTM</code> association is often considered the ‘old-school’ way of creating a many-to-many relationship. In fact, most people in the Rails community would advise against using this relationship.</p>
+<p>The <code class="highlighter-rouge">HABTM</code> association is often considered the ‘old-school’ way of creating a many-to-many relationship. In fact, most people in the Rails community would advise against using this relationship.</p>
 
-<p>The <code>HMT</code> association is more flexible and should be the default approach when a many-to-many relationship is needed.</p>
+<p>The <code class="highlighter-rouge">HMT</code> association is more flexible and should be the default approach when a many-to-many relationship is needed.</p>
 
 <p>For example, the cost of a show that involves both a movie and a theatre can be added to the join model as an additional column. This flexibility is not possible using a HABTM with a join table.</p>
 
@@ -113,39 +117,44 @@
 
 <p>Use the Rails generate command to create the three model classes.</p>
 
-<pre><code>rails g model movie title:string
+<div class="highlighter-rouge"><pre class="highlight"><code>rails g model movie title:string
 rails g model theatre name:string
 rails g model showtime
 </code></pre>
+</div>
 
 <p>Run the migration:</p>
 
-<pre><code>rake db:migrate
+<div class="highlighter-rouge"><pre class="highlight"><code>rake db:migrate
 </code></pre>
+</div>
 
 <p>Create a new migration:</p>
 
-<pre><code>rails g migration AddColumnToShowtime
+<div class="highlighter-rouge"><pre class="highlight"><code>rails g migration AddColumnToShowtime
 </code></pre>
+</div>
 
 <p>Update the migration file:</p>
 
-<pre><code>class AddColumnToShowtime &lt; ActiveRecord::Migration
+<div class="highlighter-rouge"><pre class="highlight"><code>class AddColumnToShowtime &lt; ActiveRecord::Migration
   def change
     add_column :showtime, :movie_id, :integer
     add_column :showtime, :theatre_id, :integer
   end
 end
 </code></pre>
+</div>
 
 <p>Run the migration:</p>
 
-<pre><code>rake db:migrate
+<div class="highlighter-rouge"><pre class="highlight"><code>rake db:migrate
 </code></pre>
+</div>
 
 <p>Now add the relationships to the model classes:</p>
 
-<pre><code># models/movie.rb
+<div class="highlighter-rouge"><pre class="highlight"><code># models/movie.rb
 class Movie &lt; ActiveRecord::Base
   has_many :showtimes
   has_many :theatres, through: :showtimes
@@ -163,6 +172,7 @@ class ShowTime &lt; ActiveRecord::Base
   belongs_to :theatre
 end
 </code></pre>
+</div>
 
 <h3 id="how-to-setup-an-habtm-association">How to setup an HABTM association</h3>
 
@@ -172,23 +182,26 @@ end
 
 <p>Use the Rails generate command to create the model classes.</p>
 
-<pre><code>rails g model movie title:string
+<div class="highlighter-rouge"><pre class="highlight"><code>rails g model movie title:string
 rails g model theatre name:string
 </code></pre>
+</div>
 
 <p>Run the migration:</p>
 
-<pre><code>rake db:migrate
+<div class="highlighter-rouge"><pre class="highlight"><code>rake db:migrate
 </code></pre>
+</div>
 
 <p>Create a new migration for the join table. Rails 4 provides the new create_join_table method.</p>
 
-<pre><code>rails g migration create_join_table movie theatre
+<div class="highlighter-rouge"><pre class="highlight"><code>rails g migration create_join_table movie theatre
 </code></pre>
+</div>
 
 <p>Verify your migration file looks like this.</p>
 
-<pre><code>class CreateJoinTable &lt; ActiveRecord::Migration
+<div class="highlighter-rouge"><pre class="highlight"><code>class CreateJoinTable &lt; ActiveRecord::Migration
   def change
     create_join_table :movies, :theatres do |t|
       t.index [:movie_id, :theatre_id]
@@ -197,15 +210,17 @@ rails g model theatre name:string
   end
 end
 </code></pre>
+</div>
 
 <p>Run the migration:</p>
 
-<pre><code>rake db:migrate
+<div class="highlighter-rouge"><pre class="highlight"><code>rake db:migrate
 </code></pre>
+</div>
 
 <p>Now add the relationships to the model classes:</p>
 
-<pre><code># models/movie.rb
+<div class="highlighter-rouge"><pre class="highlight"><code># models/movie.rb
 class Movie &lt; ActiveRecord::Base
   has_and_belongs_to_many :theatres
 end
@@ -215,6 +230,7 @@ class Theatre &lt; ActiveRecord::Base
   has_and_belongs_to_many :movies
 end
 </code></pre>
+</div>
 
 <p>Remember, the example for a HABTM association is almost never used in the Rails world. I’m showing this example only for a comparison. Keep you life simple and use the HTM instead.</p>
 
@@ -224,20 +240,23 @@ end
 
 <p>Let’s start up the rails console.</p>
 
-<pre><code>rails c
+<div class="highlighter-rouge"><pre class="highlight"><code>rails c
 </code></pre>
+</div>
 
 <p>Create movie and theatre instances.</p>
 
-<pre><code>movie = Movie.create(title: "Jaws")
+<div class="highlighter-rouge"><pre class="highlight"><code>movie = Movie.create(title: "Jaws")
 
 theatre = Theatre.create(name: "Sundance Kabuki Cinemas")
 </code></pre>
+</div>
 
 <p>Now let’s create the relationship between Jaws and Sundance Kabuki Cinema.</p>
 
-<pre><code>movie.showtimes.create(theatre: theatre)
+<div class="highlighter-rouge"><pre class="highlight"><code>movie.showtimes.create(theatre: theatre)
 </code></pre>
+</div>
 
 <p>There you have it. Since we used a join model, we can now create a new migration to add the movie time and the price of Jaws as it’s played at the Sundance Kabuki Cinema.</p>
 
@@ -255,7 +274,7 @@ theatre = Theatre.create(name: "Sundance Kabuki Cinemas")
 
     // var disqus_config = function () {
     //     this.page.url =  http://jeffthomas.xyz/many-to-many-relationships-in-rails; // Replace PAGE_URL with your page's canonical URL variable
-    //     this.page.identifier = /many_to_many-relationships-in-rails; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    //     this.page.identifier = /many-to-many-relationships-in-rails; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     // };
 
 

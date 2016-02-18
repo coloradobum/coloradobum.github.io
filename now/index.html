@@ -6,11 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Integration tests with Stripe</title>
-  <meta name="description" content="I recently added Stripe integration to a web site and wanted to share my experience.">
+  <title>now</title>
+  <meta name="description" content="Reflections and lessons learned during my adventures in software development.
+">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://jeffthomas.xyz/integration-tests-with-stripe">
+  <link rel="canonical" href="http://jeffthomas.xyz/now/">
   <link rel="alternate" type="application/rss+xml" title="My Adventures in Coding" href="http://jeffthomas.xyz/feed.xml">
 </head>
 
@@ -72,83 +73,20 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        <article class="post">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Integration tests with Stripe</h1>
-    <p class="post-meta"><time datetime="2014-09-18T20:33:40-06:00" itemprop="datePublished">Sep 18, 2014</time></p>
+    <h1 class="post-title">now</h1>
   </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <p>I recently added <a href="https://www.stripe.com">Stripe</a> integration to a web site and wanted to share my experience.</p>
+  <div class="post-content">
+    <p>Inspired by <a href="http://sivers.org/nowff">Derek Sivers</a></p>
 
-<p>I started with an integration test, in accordance with an outside-in TDD approach.</p>
-
-<p>As a good netcitizen, I wanted to refrain from hitting the Stripe servers with every test run, so I started to mock the Stripe API.</p>
-
-<p>My first reaction was to reach for the handy <a href="https://github.com/vcr/vcr">vcr gem</a>. Similar to a vcr, the vcr gem records the first response from an API and then uses this cached response in subsequent test runs.</p>
-
-<p>I soon realized the vcr gem is designed to mock only server side http requests and not client side browser requests.</p>
-
-<p>When using stripe.js, the browser first sends the request to the stripe api to get a token that represents the credit card information.</p>
-
-<p>The request is then forwarded to the server where a separate request is made for the payment to the Stripe API using the tokenized credit card value.</p>
-
-<p>My initial search for a gem to handle browser based (aka javascript) http requests uncovered the <a href="https://github.com/oesmith/puffing-billy">puffing billy gem</a>.  If nothing else, the name was cool.</p>
-
-<p>In the end I decided to use the <a href="https://github.com/rebelidealist/stripe-ruby-mock">stripe-ruby-mock gem</a>. This gem is specifically designed for stubbing the Stripe API, including a way to start up a API mock server for integration tests.</p>
-
-<p>The documentation is good, but here are the specific steps I took to get this running. I’m using rspec.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code># Gemfile
-group :test do  
-  gem 'stripe-ruby-mock'
-  gem 'thin' # default for mock server
-end ______
-# rails_helper.rb
-  	require 'thin'
-  	require 'stripe_mock'
-</code></pre>
-</div>
-
- 	StripeMock.spawn_server
-
-<p>Here is the integration test:</p>
-
-<p><img src="images/integration-tests-with-stripe/upgrade_to_premium_account_spec.png" alt="alt" /></p>
-
-<p>Here is the mock server in action.  You can see the server daemon starts before the test and then ends after the test.</p>
-
-<p><img src="images/integration-tests-with-stripe/mock_server.png" alt="alt" /></p>
-
+<p>TBD</p>
 
   </div>
 
 </article>
-
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-
-    // var disqus_config = function () {
-    //     this.page.url =  http://jeffthomas.xyz/integration-tests-with-stripe; // Replace PAGE_URL with your page's canonical URL variable
-    //     this.page.identifier = /integration-tests-with-stripe; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    // };
-
-
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//jeffthomas.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
       </div>
     </div>

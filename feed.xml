@@ -6,9 +6,9 @@
 </description>
     <link>http://jeffthomas.xyz/</link>
     <atom:link href="http://jeffthomas.xyz/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 11 Nov 2015 11:32:56 -0700</pubDate>
-    <lastBuildDate>Wed, 11 Nov 2015 11:32:56 -0700</lastBuildDate>
-    <generator>Jekyll v3.0.0</generator>
+    <pubDate>Wed, 17 Feb 2016 21:08:57 -0700</pubDate>
+    <lastBuildDate>Wed, 17 Feb 2016 21:08:57 -0700</lastBuildDate>
+    <generator>Jekyll v3.1.1</generator>
     
       <item>
         <title>many_to_many relationships in Rails</title>
@@ -29,11 +29,11 @@
 
 &lt;p&gt;When and why should you use one or the other?&lt;/p&gt;
 
-&lt;p&gt;The &lt;code&gt;HABTM&lt;/code&gt; association uses a &lt;strong&gt;join table&lt;/strong&gt; to manage the relationship while the &lt;code&gt;HMT&lt;/code&gt; association uses a &lt;strong&gt;join model&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;HABTM&lt;/code&gt; association uses a &lt;strong&gt;join table&lt;/strong&gt; to manage the relationship while the &lt;code class=&quot;highlighter-rouge&quot;&gt;HMT&lt;/code&gt; association uses a &lt;strong&gt;join model&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;The &lt;code&gt;HABTM&lt;/code&gt; association is often considered the ‘old-school’ way of creating a many-to-many relationship. In fact, most people in the Rails community would advise against using this relationship.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;HABTM&lt;/code&gt; association is often considered the ‘old-school’ way of creating a many-to-many relationship. In fact, most people in the Rails community would advise against using this relationship.&lt;/p&gt;
 
-&lt;p&gt;The &lt;code&gt;HMT&lt;/code&gt; association is more flexible and should be the default approach when a many-to-many relationship is needed.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;HMT&lt;/code&gt; association is more flexible and should be the default approach when a many-to-many relationship is needed.&lt;/p&gt;
 
 &lt;p&gt;For example, the cost of a show that involves both a movie and a theatre can be added to the join model as an additional column. This flexibility is not possible using a HABTM with a join table.&lt;/p&gt;
 
@@ -49,39 +49,44 @@
 
 &lt;p&gt;Use the Rails generate command to create the three model classes.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rails g model movie title:string
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rails g model movie title:string
 rails g model theatre name:string
 rails g model showtime
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Run the migration:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rake db:migrate
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rake db:migrate
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Create a new migration:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rails g migration AddColumnToShowtime
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rails g migration AddColumnToShowtime
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Update the migration file:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;class AddColumnToShowtime &amp;lt; ActiveRecord::Migration
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class AddColumnToShowtime &amp;lt; ActiveRecord::Migration
   def change
     add_column :showtime, :movie_id, :integer
     add_column :showtime, :theatre_id, :integer
   end
 end
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Run the migration:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rake db:migrate
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rake db:migrate
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Now add the relationships to the model classes:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;# models/movie.rb
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# models/movie.rb
 class Movie &amp;lt; ActiveRecord::Base
   has_many :showtimes
   has_many :theatres, through: :showtimes
@@ -99,6 +104,7 @@ class ShowTime &amp;lt; ActiveRecord::Base
   belongs_to :theatre
 end
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h3 id=&quot;how-to-setup-an-habtm-association&quot;&gt;How to setup an HABTM association&lt;/h3&gt;
 
@@ -108,23 +114,26 @@ end
 
 &lt;p&gt;Use the Rails generate command to create the model classes.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rails g model movie title:string
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rails g model movie title:string
 rails g model theatre name:string
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Run the migration:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rake db:migrate
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rake db:migrate
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Create a new migration for the join table. Rails 4 provides the new create_join_table method.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rails g migration create_join_table movie theatre
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rails g migration create_join_table movie theatre
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Verify your migration file looks like this.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;class CreateJoinTable &amp;lt; ActiveRecord::Migration
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class CreateJoinTable &amp;lt; ActiveRecord::Migration
   def change
     create_join_table :movies, :theatres do |t|
       t.index [:movie_id, :theatre_id]
@@ -133,15 +142,17 @@ rails g model theatre name:string
   end
 end
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Run the migration:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rake db:migrate
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rake db:migrate
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Now add the relationships to the model classes:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;# models/movie.rb
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# models/movie.rb
 class Movie &amp;lt; ActiveRecord::Base
   has_and_belongs_to_many :theatres
 end
@@ -151,6 +162,7 @@ class Theatre &amp;lt; ActiveRecord::Base
   has_and_belongs_to_many :movies
 end
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Remember, the example for a HABTM association is almost never used in the Rails world. I’m showing this example only for a comparison. Keep you life simple and use the HTM instead.&lt;/p&gt;
 
@@ -160,20 +172,23 @@ end
 
 &lt;p&gt;Let’s start up the rails console.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rails c
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rails c
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Create movie and theatre instances.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;movie = Movie.create(title: &quot;Jaws&quot;)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;movie = Movie.create(title: &quot;Jaws&quot;)
 
 theatre = Theatre.create(name: &quot;Sundance Kabuki Cinemas&quot;)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Now let’s create the relationship between Jaws and Sundance Kabuki Cinema.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;movie.showtimes.create(theatre: theatre)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;movie.showtimes.create(theatre: theatre)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;There you have it. Since we used a join model, we can now create a new migration to add the movie time and the price of Jaws as it’s played at the Sundance Kabuki Cinema.&lt;/p&gt;
 
@@ -197,24 +212,27 @@ theatre = Theatre.create(name: &quot;Sundance Kabuki Cinemas&quot;)
 
 &lt;p&gt;If you have Devise installed and the proper association is setup you can use the current_user helper from devise.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;#app/models/user.rb
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#app/models/user.rb
 has_many :trees
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;A user_id field must also exist in the trees table.  This is setup when you run the generator. If you use the references word below, rails will automatically add the association above.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rails g model trees user:references
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rails g model trees user:references
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Then in the trees controller use this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;#app/controllers/trees_controller.rb
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#app/controllers/trees_controller.rb
 ....
 def create
   @tree = current_user.trees.new(tree_params)
 end
 ...
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;You’ll now need to be logged in to create a new tree, but any new trees will now have an owner!&lt;/p&gt;
 
@@ -269,11 +287,11 @@ end
 
 &lt;p&gt;For example, here’s a ssh string using a non-default ssh key and port number.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ssh -i ~/.ssh/a_public.key user489c@some.server01.com -p 5486&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh -i ~/.ssh/a_public.key user489c@some.server01.com -p 5486&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Using the ssh config file we can easily abstract away the details to something easier to remember.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ssh my_blog_site&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh my_blog_site&lt;/code&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;enter-the-ssh-config-file&quot;&gt;Enter the ssh config file&lt;/h3&gt;
 
@@ -281,50 +299,54 @@ end
 
 &lt;p&gt;First, create the ssh config file if it doesn’t exist&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;touch ~/.ssh/config&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;touch ~/.ssh/config&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Open and add a entry for the ssh connection string parameters above:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;# ~/.ssh/config
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# ~/.ssh/config
 Host myblog
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Next abstract the location of the public key to use for this connection.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;# ~/.ssh/config
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# ~/.ssh/config
 Host myblog
   	IdentityFile .ssh/hosting_public.key
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;So no we have:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ssh 7605.us.34@jungleserver01.34j.com -p 5486&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh 7605.us.34@jungleserver01.34j.com -p 5486&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Let’s tackle the port number next.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;# ~/.ssh/config	
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# ~/.ssh/config	
 Host myblog
   	IdentityFile .ssh/hosting_public.key
   	Port 5486
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Easier…&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ssh 7605.us.34@jungleserver01.34j.com&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh 7605.us.34@jungleserver01.34j.com&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Add finally the username and hostname&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;# ~/.ssh/config
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# ~/.ssh/config
 Host myblog
   	IdentityFile .ssh/hosting_public.key
   	Port 5486
   	User 7605.us.34
   	HostName jungleserver01.34j.com
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;The final simplified version of the ssh connection string.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ssh myblog&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh myblog&lt;/code&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;using-the-ssh-config-file-and-alias-together&quot;&gt;Using the ssh config file and alias together&lt;/h3&gt;
 
@@ -332,7 +354,7 @@ Host myblog
 
 &lt;p&gt;For example, let’s say I have 5 servers each with 10 separate unix user accounts. This is 50 unique ssh strings to manage.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;server1
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;server1
 user1
 user2
 ...
@@ -346,12 +368,13 @@ user10
 
 ...
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Using the ssh config file I can abstrast the server hostname.&lt;/p&gt;
 
  	#~/.ssh/config
 
-&lt;pre&gt;&lt;code&gt;Host production1
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Host production1
 	HostName server1.somewhere.com
     
 Host production2
@@ -363,16 +386,18 @@ Host staging
 Host development
 	HostName server7.somewhere.com
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Using an alias file I can  further simplify the command&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;#.zshrc or .bashrc or etc.
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#.zshrc or .bashrc or etc.
 alias p1=&#39;ssh user1@production1&#39;
 alias p2=&#39;ssh user2@production2&#39;
 alias s1=&#39;ssh user1
 ...
 etc
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Now I abstract my all my server locations. If the server hostname or something else changes, it’s arguably easier to refactor using these files.&lt;/p&gt;
 
@@ -409,7 +434,7 @@ etc
 
 &lt;p&gt;The documentation is good, but here are the specific steps I took to get this running. I’m using rspec.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;# Gemfile
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Gemfile
 group :test do  
   gem &#39;stripe-ruby-mock&#39;
   gem &#39;thin&#39; # default for mock server
@@ -418,6 +443,7 @@ end ______
   	require &#39;thin&#39;
   	require &#39;stripe_mock&#39;
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
  	StripeMock.spawn_server
 
@@ -443,15 +469,15 @@ end ______
 
 &lt;p&gt;It’s often not possible to finish a feature in one sitting or more complex features in even one day.  I have two possible options when it comes to “save early, save often”.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;git stash&lt;/code&gt; or &lt;code&gt;git rebase&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git stash&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;git rebase&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;git stash&lt;/code&gt; works fine, but I often forget to apply the stash when returning to a branch.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git stash&lt;/code&gt; works fine, but I often forget to apply the stash when returning to a branch.&lt;/p&gt;
 
-&lt;h2 id=&quot;use-git-rebase&quot;&gt;Use &lt;code&gt;git rebase&lt;/code&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;use-git-rebase&quot;&gt;Use &lt;code class=&quot;highlighter-rouge&quot;&gt;git rebase&lt;/code&gt;&lt;/h2&gt;
 
-&lt;p&gt;&lt;code&gt;git rebase&lt;/code&gt; has many uses, but I will focus on this one where `x’ is the number of previous commits from HEAD.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git rebase&lt;/code&gt; has many uses, but I will focus on this one where `x’ is the number of previous commits from HEAD.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;git rebase -i HEAD~x&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git rebase -i HEAD~x&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;I can now save early and save often knowing that I can merge, or in git parlance, “squash” all the verbose commits into one commit later.&lt;/p&gt;
 
@@ -459,7 +485,7 @@ end ______
 
 &lt;p&gt;First, assign a default editor to git. I will use vim, but you can &lt;a href=&quot;https://help.github.com/articles/associating-text-editors-with-git&quot;&gt;use others&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;git config --global core.editor &quot;vim&quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git config --global core.editor &quot;vim&quot;&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Consider the following git log:&lt;/p&gt;
 
@@ -469,7 +495,7 @@ end ______
 
 &lt;p&gt;For example, if I want to submit a pull request, the code reviewers will want to view the final code, not all the individual steps taken.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;git rebase -i HEAD~3&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git rebase -i HEAD~3&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;This commands tells git I want to “interactively” rebase or squash the HEAD commit with the last 3 commits into one commit.&lt;/p&gt;
 

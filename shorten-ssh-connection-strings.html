@@ -43,15 +43,19 @@
           
         
           
+          <a class="page-link" href="/now/">now</a>
+          
+        
+          
           <a class="page-link" href="/hire-me/">Hire me</a>
           
         
           
-          <a class="page-link" href="/resume/">Resume</a>
+          <a class="page-link" href="/about-me/">About Me</a>
           
         
           
-          <a class="page-link" href="/about-me/">About Me</a>
+          <a class="page-link" href="/resume/">Resume</a>
           
         
           
@@ -84,11 +88,11 @@
 
 <p>For example, here’s a ssh string using a non-default ssh key and port number.</p>
 
-<p><code>ssh -i ~/.ssh/a_public.key user489c@some.server01.com -p 5486</code></p>
+<p><code class="highlighter-rouge">ssh -i ~/.ssh/a_public.key user489c@some.server01.com -p 5486</code></p>
 
 <p>Using the ssh config file we can easily abstract away the details to something easier to remember.</p>
 
-<p><code>ssh my_blog_site</code></p>
+<p><code class="highlighter-rouge">ssh my_blog_site</code></p>
 
 <h3 id="enter-the-ssh-config-file">Enter the ssh config file</h3>
 
@@ -96,50 +100,54 @@
 
 <p>First, create the ssh config file if it doesn’t exist</p>
 
-<p><code>touch ~/.ssh/config</code></p>
+<p><code class="highlighter-rouge">touch ~/.ssh/config</code></p>
 
 <p>Open and add a entry for the ssh connection string parameters above:</p>
 
-<pre><code># ~/.ssh/config
+<div class="highlighter-rouge"><pre class="highlight"><code># ~/.ssh/config
 Host myblog
 </code></pre>
+</div>
 
 <p>Next abstract the location of the public key to use for this connection.</p>
 
-<pre><code># ~/.ssh/config
+<div class="highlighter-rouge"><pre class="highlight"><code># ~/.ssh/config
 Host myblog
   	IdentityFile .ssh/hosting_public.key
 </code></pre>
+</div>
 
 <p>So no we have:</p>
 
-<p><code>ssh 7605.us.34@jungleserver01.34j.com -p 5486</code></p>
+<p><code class="highlighter-rouge">ssh 7605.us.34@jungleserver01.34j.com -p 5486</code></p>
 
 <p>Let’s tackle the port number next.</p>
 
-<pre><code># ~/.ssh/config	
+<div class="highlighter-rouge"><pre class="highlight"><code># ~/.ssh/config	
 Host myblog
   	IdentityFile .ssh/hosting_public.key
   	Port 5486
 </code></pre>
+</div>
 
 <p>Easier…</p>
 
-<p><code>ssh 7605.us.34@jungleserver01.34j.com</code></p>
+<p><code class="highlighter-rouge">ssh 7605.us.34@jungleserver01.34j.com</code></p>
 
 <p>Add finally the username and hostname</p>
 
-<pre><code># ~/.ssh/config
+<div class="highlighter-rouge"><pre class="highlight"><code># ~/.ssh/config
 Host myblog
   	IdentityFile .ssh/hosting_public.key
   	Port 5486
   	User 7605.us.34
   	HostName jungleserver01.34j.com
 </code></pre>
+</div>
 
 <p>The final simplified version of the ssh connection string.</p>
 
-<p><code>ssh myblog</code></p>
+<p><code class="highlighter-rouge">ssh myblog</code></p>
 
 <h3 id="using-the-ssh-config-file-and-alias-together">Using the ssh config file and alias together</h3>
 
@@ -147,7 +155,7 @@ Host myblog
 
 <p>For example, let’s say I have 5 servers each with 10 separate unix user accounts. This is 50 unique ssh strings to manage.</p>
 
-<pre><code>server1
+<div class="highlighter-rouge"><pre class="highlight"><code>server1
 user1
 user2
 ...
@@ -161,12 +169,13 @@ user10
 
 ...
 </code></pre>
+</div>
 
 <p>Using the ssh config file I can abstrast the server hostname.</p>
 
  	#~/.ssh/config
 
-<pre><code>Host production1
+<div class="highlighter-rouge"><pre class="highlight"><code>Host production1
 	HostName server1.somewhere.com
     
 Host production2
@@ -178,16 +187,18 @@ Host staging
 Host development
 	HostName server7.somewhere.com
 </code></pre>
+</div>
 
 <p>Using an alias file I can  further simplify the command</p>
 
-<pre><code>#.zshrc or .bashrc or etc.
+<div class="highlighter-rouge"><pre class="highlight"><code>#.zshrc or .bashrc or etc.
 alias p1='ssh user1@production1'
 alias p2='ssh user2@production2'
 alias s1='ssh user1
 ...
 etc
 </code></pre>
+</div>
 
 <p>Now I abstract my all my server locations. If the server hostname or something else changes, it’s arguably easier to refactor using these files.</p>
 

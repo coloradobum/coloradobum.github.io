@@ -43,15 +43,19 @@
           
         
           
+          <a class="page-link" href="/now/">now</a>
+          
+        
+          
           <a class="page-link" href="/hire-me/">Hire me</a>
           
         
           
-          <a class="page-link" href="/resume/">Resume</a>
+          <a class="page-link" href="/about-me/">About Me</a>
           
         
           
-          <a class="page-link" href="/about-me/">About Me</a>
+          <a class="page-link" href="/resume/">Resume</a>
           
         
           
@@ -80,15 +84,15 @@
 
 <p>It’s often not possible to finish a feature in one sitting or more complex features in even one day.  I have two possible options when it comes to “save early, save often”.</p>
 
-<p><code>git stash</code> or <code>git rebase</code></p>
+<p><code class="highlighter-rouge">git stash</code> or <code class="highlighter-rouge">git rebase</code></p>
 
-<p><code>git stash</code> works fine, but I often forget to apply the stash when returning to a branch.</p>
+<p><code class="highlighter-rouge">git stash</code> works fine, but I often forget to apply the stash when returning to a branch.</p>
 
-<h2 id="use-git-rebase">Use <code>git rebase</code></h2>
+<h2 id="use-git-rebase">Use <code class="highlighter-rouge">git rebase</code></h2>
 
-<p><code>git rebase</code> has many uses, but I will focus on this one where `x’ is the number of previous commits from HEAD.</p>
+<p><code class="highlighter-rouge">git rebase</code> has many uses, but I will focus on this one where `x’ is the number of previous commits from HEAD.</p>
 
-<p><code>git rebase -i HEAD~x</code></p>
+<p><code class="highlighter-rouge">git rebase -i HEAD~x</code></p>
 
 <p>I can now save early and save often knowing that I can merge, or in git parlance, “squash” all the verbose commits into one commit later.</p>
 
@@ -96,7 +100,7 @@
 
 <p>First, assign a default editor to git. I will use vim, but you can <a href="https://help.github.com/articles/associating-text-editors-with-git">use others</a>.</p>
 
-<p><code>git config --global core.editor "vim"</code></p>
+<p><code class="highlighter-rouge">git config --global core.editor "vim"</code></p>
 
 <p>Consider the following git log:</p>
 
@@ -106,7 +110,7 @@
 
 <p>For example, if I want to submit a pull request, the code reviewers will want to view the final code, not all the individual steps taken.</p>
 
-<p><code>git rebase -i HEAD~3</code></p>
+<p><code class="highlighter-rouge">git rebase -i HEAD~3</code></p>
 
 <p>This commands tells git I want to “interactively” rebase or squash the HEAD commit with the last 3 commits into one commit.</p>
 
