@@ -6,11 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Integration tests with Stripe</title>
-  <meta name="description" content="I recently added Stripe integration to a web site and wanted to share my experience.">
+  <title>Delivery Route Optimization</title>
+  <meta name="description" content="help
+">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://jeffthomas.xyz/integration-tests-with-stripe">
+  <link rel="canonical" href="http://jeffthomas.xyz/delivery-route-optimization/">
   <link rel="alternate" type="application/rss+xml" title="Reflections in the binary world" href="http://jeffthomas.xyz/feed.xml">
 </head>
 
@@ -60,83 +61,97 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        <article class="post">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Integration tests with Stripe</h1>
-    <p class="post-meta"><time datetime="2014-09-18T20:33:40-06:00" itemprop="datePublished">Sep 18, 2014</time></p>
+    <h1 class="post-title">Delivery Route Optimization</h1>
   </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <p>I recently added <a href="https://www.stripe.com">Stripe</a> integration to a web site and wanted to share my experience.</p>
+  <div class="post-content">
+    <h2 id="save-time-and-money-managing-your-delivery-routes">Save time and money managing your delivery routes</h2>
 
-<p>I started with an integration test, in accordance with an outside-in TDD approach.</p>
+<h3 id="my-customer-delivery-list-is-constantly-changing">My customer delivery list is constantly changing</h3>
+<p>Is your customer delivery list constantly changing? Do some customers get a weekly 
+delivery while others are bi-weekly or monthly? Want to simplify the management
+of your delivery routes within specific delivery zones? How do I best manage
+delivery routes with multiple drivers?</p>
 
-<p>As a good netcitizen, I wanted to refrain from hitting the Stripe servers with every test run, so I started to mock the Stripe API.</p>
+<p>Many websites exist that promise to increase your delivery efficiency, but
+how do you know which one is right for you?</p>
 
-<p>My first reaction was to reach for the handy <a href="https://github.com/vcr/vcr">vcr gem</a>. Similar to a vcr, the vcr gem records the first response from an API and then uses this cached response in subsequent test runs.</p>
+<h3 id="remove-the-pain-of--complex-delivery-route-management">Remove the pain of  complex delivery route management</h3>
+<p>Imagine a way where you can easily update delivery routes when you gain or lose a
+customer while easily managing routes with different delivery frequencies.</p>
 
-<p>I soon realized the vcr gem is designed to mock only server side http requests and not client side browser requests.</p>
+<h3 id="how-i-can-help-you">How I can help you</h3>
+<p>I’ll help you assess your current situation. Provide ways you can improve and
+help guide you to the best fit for your current business.</p>
 
-<p>When using stripe.js, the browser first sends the request to the stripe api to get a token that represents the credit card information.</p>
+<p>When finished you’ll have a clear and actionable path to a system that easily
+manages customers and delivery route to each driver for a zone that 
+reflects customers status and frequency.</p>
 
-<p>The request is then forwarded to the server where a separate request is made for the payment to the Stripe API using the tokenized credit card value.</p>
+<p>Not quite ready to commit to a new system? Perhaps your existing setup just
+needs some tweaking?</p>
 
-<p>My initial search for a gem to handle browser based (aka javascript) http requests uncovered the <a href="https://github.com/oesmith/puffing-billy">puffing billy gem</a>.  If nothing else, the name was cool.</p>
+<h3 id="how-i-can-help-you-1">How I can help you</h3>
+<p>I offer a comprehensive review of your current delivery route
+approach. We’ll first ask some questions to ensure we arrive prepared for the
+meeting. We’ll then meet and discuss your current situation and look for areas
+to improve. I’ll provide a complete report that highlights our
+discussion and a list of action steps.</p>
 
-<p>In the end I decided to use the <a href="https://github.com/rebelidealist/stripe-ruby-mock">stripe-ruby-mock gem</a>. This gem is specifically designed for stubbing the Stripe API, including a way to start up a API mock server for integration tests.</p>
+<p>The report if yours to keep. I hope you continue to work with me, but you can
+decide to make the changes yourself or work with another company to implement
+the changes.</p>
 
-<p>The documentation is good, but here are the specific steps I took to get this running. I’m using rspec.</p>
+<h3 id="what-others-are-saying">What others are saying…</h3>
+<p>I was reluctant to switch to a new delivery system. My drivers already know
+their routes and feel they can navigate better than any map program out there.
+After upgrading our route delivery system my drivers were amazed at how much
+faster they finished their routes. The real-time traffic reports even helped our
+drivers avoid current construction zones.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># Gemfile
-group :test do  
-  gem 'stripe-ruby-mock'
-  gem 'thin' # default for mock server
-end ______
-# rails_helper.rb
-  	require 'thin'
-  	require 'stripe_mock'
-</code></pre>
-</div>
+<p>-</p>
 
- 	StripeMock.spawn_server
+<p>There are many free solutions out there for finding the optimal driving route to
+multiple locations- so I was hesitant to actually pay for this service when so
+many free options exist. After using the free services I realized they don’t
+manage long delivery lists very well and managing frequent updates was a real
+nightmare.  Jeff worked with us to build a system that easily handles frequent
+delivery changes and efficiently communicates these changes to the drivers.</p>
 
-<p>Here is the integration test:</p>
+<h3 id="remind-me-again-what-im-getting">Remind me again what I’m getting</h3>
+<p>Ready to start saving time and money while providing dependable delivery service
+to your customers? Let’s meet and discuss how we can improve your current
+delivery service system.</p>
 
-<p><img src="images/integration-tests-with-stripe/upgrade_to_premium_account_spec.png" alt="alt" /></p>
+<p>After you receive a full report of our suggestions, you can continue to work 
+with me or take these ideas and implement yourself or with another company.</p>
 
-<p>Here is the mock server in action.  You can see the server daemon starts before the test and then ends after the test.</p>
+<h3 id="my-personal-guarantee">My personal guarantee</h3>
+<p>Guaranteed I’ll help you find areas to improve your delivery routes or your
+money back.</p>
 
-<p><img src="images/integration-tests-with-stripe/mock_server.png" alt="alt" /></p>
+<h3 id="ok-im-ready-to-save-time-and-money-by-optimizing-my-delivery-route">Ok, I’m ready to save time and money by optimizing my delivery route</h3>
 
+<p>First let’s <a href="https://calendly.com/jefferythomas/15-minute-meeting/02-23-2016?back=1">schedule a quick 15 minute
+meeting</a> to get an overview of your
+situation.</p>
+
+<p>We’ll schedule a time where we can meet and create a plan where you will
+save time and money by improving your delivery route, I find the sweet spot is about
+two hours.</p>
+
+<p>I’ll then send you some follow-up questions to help me best prepare for our
+meeting.</p>
+
+<h3 id="ps">P.S.</h3>
+<p>Still have questions? Send me an email and I’ll reply with a helpful answer.</p>
 
   </div>
 
 </article>
-
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-
-    // var disqus_config = function () {
-    //     this.page.url =  http://jeffthomas.xyz/integration-tests-with-stripe; // Replace PAGE_URL with your page's canonical URL variable
-    //     this.page.identifier = /integration-tests-with-stripe; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    // };
-
-
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//jeffthomas.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
       </div>
     </div>
