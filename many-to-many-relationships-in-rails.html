@@ -94,7 +94,7 @@
 
 <p>For example, the cost of a show that involves both a movie and a theatre can be added to the join model as an additional column. This flexibility is not possible using a HABTM with a join table.</p>
 
-<h3 id="how-to-setup-an-hmt-association">How to setup an HMT association</h3>
+<p>###How to setup an HMT association</p>
 
 <p>Let’s use an example of movie theatres and movies.</p>
 
@@ -128,8 +128,8 @@ rails g model showtime
 
 <div class="highlighter-rouge"><pre class="highlight"><code>class AddColumnToShowtime &lt; ActiveRecord::Migration
   def change
-    add_column :showtime, :movie_id, :integer
-    add_column :showtime, :theatre_id, :integer
+    add_column :showtimes, :movie_id, :integer
+    add_column :showtimes, :theatre_id, :integer
   end
 end
 </code></pre>
@@ -163,7 +163,7 @@ end
 </code></pre>
 </div>
 
-<h3 id="how-to-setup-an-habtm-association">How to setup an HABTM association</h3>
+<p>###How to setup an HABTM association</p>
 
 <p>A HABTM association will probably never be used in a new Rails application since the HMT is the best and most flexible choice for most situations, but for reference, here it is.</p>
 
@@ -223,7 +223,7 @@ end
 
 <p>Remember, the example for a HABTM association is almost never used in the Rails world. I’m showing this example only for a comparison. Keep you life simple and use the HTM instead.</p>
 
-<h3 id="using-an-hmt-relationship">Using an HMT Relationship</h3>
+<p>###Using an HMT Relationship</p>
 
 <p>Now that a many-to-many relationship is setup using an HMT association, how do we use it? The following applies only to the HMT relationship</p>
 
